@@ -90,7 +90,7 @@ namespace BlabberApp.DataStore.Plugins
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new Exception(ex.ToString() + ": Not found");
             }
         }
         public IEntity ReadByUserEmail(string Id)
@@ -110,7 +110,7 @@ namespace BlabberApp.DataStore.Plugins
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString() + ":ReadByUserEmail: Not Found");
+                throw new Exception(ex.ToString() + ": Not found");
             }
         }
 

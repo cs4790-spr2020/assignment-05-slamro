@@ -1,0 +1,16 @@
+#!/bin/sh
+
+cd BlabberApp.ServicesTest
+dotnet add package coverlet.msbuild
+dotnet test /p:CollectCoverage=true /p:CoverLetOutput=TestResults /p:CoverletOutputFormat=lcov
+cd ../BlabberApp.DomainTest
+dotnet add package coverlet.msbuild
+dotnet test /p:CollectCoverage=true /p:CoverLetOutput=TestResults /p:CoverletOutputFormat=lcov
+cd ../BlabberApp.DataStoreTest
+dotnet add package coverlet.msbuild
+dotnet test /p:CollectCoverage=true /p:CoverLetOutput=TestResults /p:CoverletOutputFormat=lcov
+cd ../BlabberApp.ClientTest
+dotnet add package coverlet.msbuild
+dotnet test /p:CollectCoverage=true /p:CoverLetOutput=TestResults /p:CoverletOutputFormat=lcov
+cd ../BlabberApp.Client
+dotnet run

@@ -1,60 +1,62 @@
 using System;
 using System.Collections;
-using BlabberApp.DataStore.Interfaces;
 using BlabberApp.DataStore.Exceptions;
+using BlabberApp.DataStore.Interfaces;
 using BlabberApp.Domain.Entities;
 
 namespace BlabberApp.DataStore.Adapters
 {
     public class UserAdapter
     {
-        private IUserPlugin plugin;
+        private readonly IUserPlugin _plugin;
 
         public UserAdapter(IUserPlugin plugin)
         {
-            this.plugin = plugin;
+            _plugin = plugin;
         }
 
         public void Add(User user)
         {
-            User existingUser = GetByEmail(user.Email.ToString());
-            if (existingUser != null)
-            {
-                throw new NullReferenceException(": UserAdapter: Email already tied to another user");
-            }
             try
             {
-                this.plugin.Create(user);
+                GetByEmail(user.Email.ToString());
             }
-            catch (Exception ex)
+            catch (UserAdapterNotFoundException)
             {
-                throw new NullReferenceException(ex.ToString() + ": UserAdapter: Email already tied to another user");
+                try
+                {
+                    _plugin.Create(user);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    throw new UserAdapterException(ex.ToString());
+                }
             }
-
+            throw new UserAdapterDuplicateException("Email already exists.");
         }
 
         public void Remove(User user)
         {
             try
             {
-                this.plugin.Delete(user);
+                _plugin.Delete(user);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new UserAdapterException(ex.ToString());
             }
-            
         }
 
         public void Update(User user)
         {
             try
             {
-                this.plugin.Update(user);
+                _plugin.Update(user);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new UserAdapterException(ex.ToString());
             }
         }
 
@@ -62,11 +64,11 @@ namespace BlabberApp.DataStore.Adapters
         {
             try
             {
-                return this.plugin.ReadAll();
+                return _plugin.ReadAll();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new UserAdapterException(ex.ToString());
             }
         }
 
@@ -74,12 +76,12 @@ namespace BlabberApp.DataStore.Adapters
         {
             try
             {
-                User user = (User)this.plugin.ReadById(Id);
+                User user = (User)_plugin.ReadById(Id);
                 return user;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new UserAdapterNotFoundException(ex.ToString());
             }
         }
 
@@ -87,12 +89,12 @@ namespace BlabberApp.DataStore.Adapters
         {
             try
             {
-                User user = (User)this.plugin.ReadByUserEmail(email);
+                User user = (User)_plugin.ReadByUserEmail(email);
                 return user;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new UserAdapterNotFoundException(ex.ToString());
             }
         }
     }

@@ -13,7 +13,7 @@ namespace BlabberApp.DataStore.Plugins
         MySqlConnection dcBlab;
         public MySqlBlab()
         {
-            this.dcBlab = new MySqlConnection("server=142.93.114.73;database=slamro;user=slamro;password=letmein");
+            this.dcBlab = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
             try
             {
                 this.dcBlab.Open();
@@ -150,4 +150,3 @@ namespace BlabberApp.DataStore.Plugins
         }
     }
 }
-
