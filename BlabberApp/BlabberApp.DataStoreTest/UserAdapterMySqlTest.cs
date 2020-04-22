@@ -11,21 +11,17 @@ namespace BlabberApp.DataStoreTest
     public class UserAdapter_MySql_UnitTests
     {
         private User _user;
-        private UserAdapter _harness = new UserAdapter(new MySqlUser());
+        private UserAdapter _harness;
         private readonly string _email = "foobar@example.com";
 
         [TestInitialize]
         public void Setup()
         {
             _user = new User(_email);
+            _harness = new UserAdapter(new MySqlUser());
+            _harness.RemoveAll();
         }
-        [TestCleanup]
-        public void TearDown()
-        {
-            User user = new User(_email);
-            _harness.Remove(user);
-        }
-
+        
         [TestMethod]
         public void Canary()
         {
@@ -56,6 +52,13 @@ namespace BlabberApp.DataStoreTest
             User actual = (User)users[0];
             //Assert
             Assert.AreEqual(_user.Id.ToString(), actual.Id.ToString());
+        }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            User user = new User(_email);
+            _harness.RemoveAll();
         }
     }
 }

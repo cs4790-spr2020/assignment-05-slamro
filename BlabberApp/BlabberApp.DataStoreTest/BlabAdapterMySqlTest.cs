@@ -9,8 +9,15 @@ namespace BlabberApp.DataStoreTest
     [TestClass]
     public class BlabAdapter_MySql_UnitTests
     {
-        private BlabAdapter _harness = new BlabAdapter(new MySqlBlab());
+        private BlabAdapter _harness;
 
+        [TestInitialize]
+        public void Setup()
+        {
+            _harness = new BlabAdapter(new MySqlBlab());
+            _harness.RemoveAll();
+        }
+        
         [TestMethod]
         public void Canary()
         {
@@ -29,6 +36,12 @@ namespace BlabberApp.DataStoreTest
             ArrayList actual = (ArrayList)_harness.GetByUserId(email);
             //Assert
             Assert.AreEqual(1, actual.Count);
+        }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            _harness.RemoveAll();
         }
     }
 }

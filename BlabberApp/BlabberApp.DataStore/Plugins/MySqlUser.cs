@@ -131,6 +131,13 @@ namespace BlabberApp.DataStore.Plugins
             }
         }
 
+        public void DeleteAll()
+        {
+                string sql = "TRUNCATE TABLE users";
+                MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
+                cmd.ExecuteNonQuery();
+        }
+
         private User DataRow2User(DataRow row)
         {
             User user = new User();

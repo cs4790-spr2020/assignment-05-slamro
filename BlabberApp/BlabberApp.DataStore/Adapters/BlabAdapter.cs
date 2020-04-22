@@ -23,6 +23,10 @@ namespace BlabberApp.DataStore.Adapters
        {
            this.plugin.Delete(blab);
        }
+       public void RemoveAll()
+       {
+           this.plugin.DeleteAll();
+       }
 
        public void Update(Blab blab)
        {

@@ -133,7 +133,12 @@ namespace BlabberApp.DataStore.Plugins
         {
             Blab blab = (Blab)obj;
         }
-        
+        public void DeleteAll()
+        {
+                string sql = "TRUNCATE TABLE blabs";
+                MySqlCommand cmd = new MySqlCommand(sql, this.dcBlab);
+                cmd.ExecuteNonQuery();
+        }
         private Blab DataRow2Blab(DataRow row)
         {
             User user = new User();

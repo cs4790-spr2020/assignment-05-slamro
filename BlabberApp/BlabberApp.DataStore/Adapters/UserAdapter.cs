@@ -47,6 +47,10 @@ namespace BlabberApp.DataStore.Adapters
                 throw new UserAdapterException(ex.ToString());
             }
         }
+        public void RemoveAll()
+        {
+            _plugin.DeleteAll();
+        }
 
         public void Update(User user)
         {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using BlabberApp.DataStore.Interfaces;
-using BlabberApp.Domain.Interfaces;
 using BlabberApp.Domain.Entities;
+using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Plugins
 {
@@ -26,7 +26,7 @@ namespace BlabberApp.DataStore.Plugins
 
         public IEntity ReadById(Guid Id)
         {
-            foreach(IEntity obj in this.buffer)
+            foreach (IEntity obj in this.buffer)
             {
                 if (Id.Equals(obj.Id)) return obj;
             }
@@ -38,7 +38,7 @@ namespace BlabberApp.DataStore.Plugins
         }
         public IEntity ReadByUserEmail(string email)
         {
-            foreach(User user in buffer)
+            foreach (User user in buffer)
             {
                 if (user.Email.Equals(email))
                 {
@@ -57,6 +57,10 @@ namespace BlabberApp.DataStore.Plugins
         public void Delete(IEntity obj)
         {
             this.buffer.Remove(obj);
+        }
+        public void DeleteAll()
+        {
+            this.buffer.Clear();
         }
     }
 }

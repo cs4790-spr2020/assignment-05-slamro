@@ -32,7 +32,7 @@ namespace BlabberApp.ServicesTest
         }
 
         [TestMethod]
-        public void AddNewBlabSuccessTest()
+        public void AddNewBlabTest()
         {
             //Arrange
             string email = "user@example.com";
@@ -41,9 +41,9 @@ namespace BlabberApp.ServicesTest
             Blab blab = blabService.CreateBlab(msg, email);
             blabService.AddBlab(blab);
             //Act
-            Blab actual = (Blab)blabService.FindUserBlabs(email);
+            var actual = Assert.ThrowsException<NotImplementedException>(() => blabService.FindUserBlabs(email));
             //Assert
-            // Assert.AreEqual(blab.Message, actual.Message);
+            Assert.AreEqual("FindUserBlabs", actual.Message);
         }
     }
 }

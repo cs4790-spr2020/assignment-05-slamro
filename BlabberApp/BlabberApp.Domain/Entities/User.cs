@@ -20,6 +20,7 @@ namespace BlabberApp.Domain.Entities
             this.Id = Guid.NewGuid();
             this.ChangeEmail(email); 
         }
+        
 
         public void ChangeEmail(string email)
         {

@@ -11,5 +11,6 @@ namespace BlabberApp.DataStore.Interfaces
         IEntity ReadById(Guid Id);
         void Update(IEntity obj);
         void Delete(IEntity obj);
+        void DeleteAll();
     }
 }
