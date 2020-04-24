@@ -21,7 +21,7 @@ namespace BlabberApp.DataStore.Adapters
             {
                 GetByEmail(user.Email.ToString());
             }
-            catch (UserAdapterNotFoundException)
+            catch (UserAdapterNotFoundException )
             {
                 try
                 {
@@ -30,7 +30,7 @@ namespace BlabberApp.DataStore.Adapters
                 }
                 catch (Exception ex)
                 {
-                    throw new UserAdapterException(ex.ToString());
+                    throw new UserAdapterException(ex.Message.ToString());
                 }
             }
             throw new UserAdapterDuplicateException("Email already exists.");
@@ -44,7 +44,7 @@ namespace BlabberApp.DataStore.Adapters
             }
             catch (Exception ex)
             {
-                throw new UserAdapterException(ex.ToString());
+                throw new UserAdapterException(ex.Message.ToString());
             }
         }
         public void RemoveAll()
@@ -57,10 +57,11 @@ namespace BlabberApp.DataStore.Adapters
             try
             {
                 _plugin.Update(user);
+                return;
             }
             catch (Exception ex)
             {
-                throw new UserAdapterException(ex.ToString());
+                throw new UserAdapterException(ex.Message.ToString());
             }
         }
 
@@ -85,7 +86,7 @@ namespace BlabberApp.DataStore.Adapters
             }
             catch (Exception ex)
             {
-                throw new UserAdapterNotFoundException(ex.ToString());
+                throw new UserAdapterNotFoundException(ex.Message.ToString());
             }
         }
 
@@ -98,7 +99,7 @@ namespace BlabberApp.DataStore.Adapters
             }
             catch (Exception ex)
             {
-                throw new UserAdapterNotFoundException(ex.ToString());
+                throw new UserAdapterNotFoundException(ex.Message.ToString());
             }
         }
     }

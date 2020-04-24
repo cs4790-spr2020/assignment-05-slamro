@@ -48,6 +48,18 @@ namespace BlabberApp.DataStore.Plugins
             throw new Exception("Not found");
         }
 
+        public IEntity ReadByUserIdMessage(IEntity obj)
+        {
+            foreach (IEntity ent in buffer)
+            {
+                if (ent.Id.Equals(obj.Id) )
+                {
+                    return ent;
+                }
+            }
+            throw new Exception("Not found");
+        }
+
         public void Update(IEntity obj)
         {
             this.Delete(obj);

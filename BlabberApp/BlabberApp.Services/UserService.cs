@@ -13,11 +13,6 @@ namespace BlabberApp.Services
             _adapter = adapter;
         }
 
-        public IEnumerable GetAll()
-        {
-            return _adapter.GetAll();
-        }
-
         public void AddNewUser(string email)
         {
             try
@@ -26,18 +21,82 @@ namespace BlabberApp.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw new Exception(ex.Message.ToString());
             }
         }
 
         public User CreateUser(string email)
         {
-            return new User(email);
+            User tester = new User();
+            tester.ChangeEmail(email);
+            return tester;
         }
+
+        public void RemoveUser(User user)
+        {
+            try
+            {
+                _adapter.Remove(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+
+        public void RemoveAll()
+        {
+            try
+            {
+                _adapter.RemoveAll();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+
+        public void Update(User user)
+        {
+            try
+            {
+                _adapter.Update(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+
+        public IEnumerable GetAll()
+        {
+            return _adapter.GetAll();
+        }
+
+
 
         public User FindUser(string email)
         {
+            try
+            {
             return _adapter.GetByEmail(email);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
         }
+
+        public User FindUser(User user)
+        {
+            try{
+            return _adapter.GetById(user.Id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message.ToString());
+            }
+        }
+
     }
 }

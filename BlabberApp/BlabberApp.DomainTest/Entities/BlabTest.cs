@@ -67,7 +67,7 @@ namespace BlabberApp.DomainTest.Entities
             Guid actual = harness.Id;
             // Assert
             Assert.AreEqual(actual, expected);
-            Assert.AreEqual(true, harness.Id is Guid);
+            
         }
 
         [TestMethod]
@@ -95,30 +95,37 @@ namespace BlabberApp.DomainTest.Entities
         [TestMethod]
         public void TestIsValid()
         {
-            try
-            {
-                User Stark = new User();
-                string message = "I've solved it. I've solved time travel.";
-                
-                bool expected = true;
-                bool actual = harness.IsValid();
+            Blab harness = new Blab();
+            bool expected = true;
+            bool actual = harness.IsValid();
 
-                Assert.AreEqual(actual, expected);
-            }
-            catch (Exception ex) { }
+            Assert.AreEqual(actual.ToString(), expected.ToString());
+            
         }
 
         [TestMethod]
         public void TestIsValidFail00()
         {
-            try
-            {
-                bool expected = true;
-                bool actual = harness.IsValid();
+            User test = new User();
+            Blab Stark = new Blab(test);
+            Stark.Id = Guid.Empty;
+            var expected = "Value cannot be null.";
+            
+            var actual = Assert.ThrowsException<ArgumentNullException>(() => Stark.IsValid());
 
-                Assert.Fail();
-            }
-            catch (Exception ex) { }
+            Assert.AreEqual(expected, actual.Message.ToString());
+        }
+        [TestMethod]
+        public void TestIsValidFailNullMessage()
+        {
+            // Arrange
+            Blab harness = new Blab(); 
+            harness.Message = null;
+            var expected = "Value cannot be null.";
+            // Act
+            var ex = Assert.ThrowsException<ArgumentNullException>(() => harness.IsValid());
+            // Assert
+            Assert.AreEqual(expected, ex.Message.ToString());
         }
     }
 }

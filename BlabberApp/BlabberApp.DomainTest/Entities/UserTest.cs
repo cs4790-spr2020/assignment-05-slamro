@@ -144,7 +144,7 @@ namespace BlabberApp.DomainTest.Entities
         }
 
         [TestMethod]
-        public void TestIsValidFail01()
+        public void TestIsValidFailNullEmail()
         {
             // Arrange
             User harness = new User(); 
@@ -157,7 +157,7 @@ namespace BlabberApp.DomainTest.Entities
         }
 
         [TestMethod]
-        public void TestIsValidFail02()
+        public void TestIsValidFailBlankId()
         {
             // Arrange
             User harness = new User(); 

@@ -13,7 +13,7 @@ namespace BlabberApp.DataStore.Plugins
         MySqlConnection dcBlab;
         public MySqlBlab()
         {
-            this.dcBlab = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            this.dcBlab = new MySqlConnection("server=142.93.114.73;database=slamro;user=slamro;password=letmein");
             try
             {
                 this.dcBlab.Open();
@@ -57,7 +57,7 @@ namespace BlabberApp.DataStore.Plugins
                 MySqlCommandBuilder cbBlabs = new MySqlCommandBuilder(daBlabs);
                 DataSet dsBlabs = new DataSet();
 
-                daBlabs.Fill(dsBlabs);
+                daBlabs.Fill(dsBlabs, "blabs");
 
                 ArrayList blabs = new ArrayList();
 
@@ -124,14 +124,63 @@ namespace BlabberApp.DataStore.Plugins
             }
         }
 
+        public IEntity ReadByUserIdMessage(IEntity obj)
+        {
+            Blab blab = (Blab)obj;
+            try
+            {
+                string sql = "SELECT * FROM blabs WHERE blabs.user_id = '" + blab.User.Email.ToString() + "' and message = '" + blab.Message + "';";
+                MySqlDataAdapter daBlabs = new MySqlDataAdapter(sql, this.dcBlab); // To avoid SQL injection.
+                MySqlCommandBuilder cbBlabs = new MySqlCommandBuilder(daBlabs);
+                DataSet dsBlabs = new DataSet();
+
+                daBlabs.Fill(dsBlabs);
+
+                //ArrayList blabs = new ArrayList();
+                DataRow row = dsBlabs.Tables[0].Rows[0];
+                return DataRow2Blab(row);
+
+                // foreach(DataRow dtRow in dsBlabs.Tables[0].Rows)
+                // {
+                //     blabs.Add(DataRow2Blab(dtRow));
+                // }
+                
+                // return blabs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
         public void Update(IEntity obj)
         {
             Blab blab = (Blab)obj;
+            try
+            {
+                string sql = "UPDATE blabs SET sys_id = '" + blab.Id + "', message = '" + blab.Message.ToString() + "', dttm_created = '" + blab.DTTM.ToString("yyyy-MM-dd HH:mm:ss") + "', user_id = '" + blab.User.Email + "'  WHERE sys_id = '" + blab.Id + "' and dttm_created = '" + blab.DTTM.ToString("yyyy-MM-dd HH:mm:ss") + "';";
+                MySqlCommand cmd = new MySqlCommand(sql, dcBlab);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
 
         public void Delete(IEntity obj)
         {
             Blab blab = (Blab)obj;
+            try
+            {
+                string sql = "DELETE FROM blabs WHERE blabs.sys_id ='" + blab.Id + "' and blabs.message = '" + blab.Message + "';";
+                MySqlCommand cmd = new MySqlCommand(sql, dcBlab);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
         public void DeleteAll()
         {

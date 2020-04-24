@@ -39,9 +39,8 @@ namespace BlabberApp.Domain.Entities
         public User User { get; set; }
         public bool IsValid()
         {
-            if (this.Id == null) throw new ArgumentNullException();
+            if (this.Id == Guid.Empty) throw new ArgumentNullException();
             if (this.Message == null) throw new ArgumentNullException();
-            if (this.Message.ToString() == "") throw new FormatException();
             if (this.DTTM == null) throw new ArgumentNullException();
             if (this.User == null) throw new ArgumentNullException();
             return true;

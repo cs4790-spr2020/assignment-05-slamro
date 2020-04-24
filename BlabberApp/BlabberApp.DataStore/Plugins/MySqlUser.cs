@@ -13,7 +13,7 @@ namespace BlabberApp.DataStore.Plugins
         MySqlConnection _dcUser;
         public MySqlUser()
         {
-            _dcUser = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            _dcUser = new MySqlConnection("server=142.93.114.73;database=slamro;user=slamro;password=letmein");
             try
             {
                 _dcUser.Open();
@@ -93,11 +93,11 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString() + ": Not found");
             }
         }
-        public IEntity ReadByUserEmail(string Id)
+        public IEntity ReadByUserEmail(string email)
         {
             try
             {
-                string sql = "SELECT * FROM users WHERE users.email = '" + Id.ToString() + "'";
+                string sql = "SELECT * FROM users WHERE users.email = '" + email.ToString() + "'";
                 MySqlDataAdapter daUser = new MySqlDataAdapter(sql, _dcUser); // To avoid SQL injection.
                 MySqlCommandBuilder cbUser = new MySqlCommandBuilder(daUser);
                 DataSet dsUser = new DataSet();
@@ -105,7 +105,7 @@ namespace BlabberApp.DataStore.Plugins
                 daUser.Fill(dsUser, "users");
 
                 DataRow row = dsUser.Tables[0].Rows[0];
-                
+
                 return DataRow2User(row);
             }
             catch (Exception ex)
@@ -117,25 +117,39 @@ namespace BlabberApp.DataStore.Plugins
         public void Update(IEntity obj)
         {
             User user = (User)obj;
+            try
+            {
+                string sql = "UPDATE users SET email = '" + user.Email.ToString() + "', dttm_registration = '" + user.RegisterDTTM.ToString("yyyy-MM-dd HH:mm:ss") + "', dttm_last_login = '" + user.LastLoginDTTM.ToString("yyyy-MM-dd HH:mm:ss") + "'  WHERE sys_id = '" + user.Id + "';";
+                MySqlCommand cmd = new MySqlCommand(sql, this._dcUser);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
         }
 
         public void Delete(IEntity obj)
         {
             User user = (User)obj;
-            try{
-                string sql = "DELETE FROM users WHERE users.email='"+user.Email+"'";
+            try
+            {
+                string sql = "DELETE FROM users WHERE users.email='" + user.Email + "'";
                 MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
                 cmd.ExecuteNonQuery();
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 throw new Exception(ex.ToString());
             }
         }
 
         public void DeleteAll()
         {
-                string sql = "TRUNCATE TABLE users";
-                MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
-                cmd.ExecuteNonQuery();
+            string sql = "TRUNCATE TABLE users";
+            MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
+            cmd.ExecuteNonQuery();
         }
 
         private User DataRow2User(DataRow row)

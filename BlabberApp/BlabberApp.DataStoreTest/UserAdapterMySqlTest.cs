@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BlabberApp.DataStore.Exceptions;
 using BlabberApp.DataStore.Adapters;
 using BlabberApp.DataStore.Plugins;
 using BlabberApp.Domain.Entities;
@@ -40,6 +41,51 @@ namespace BlabberApp.DataStoreTest
             //Assert
             Assert.AreEqual(_user.Id, actual.Id);
         }
+
+        [TestMethod]
+        public void TestAddUserExists()
+        {
+            //Arrange
+            _user.RegisterDTTM =DateTime.Now;
+            _user.LastLoginDTTM = DateTime.Now;
+            //Act
+            _harness.Add(_user);
+            var expected = "Email already exists.";
+            var ex = Assert.ThrowsException<UserAdapterDuplicateException>(() => _harness.Add(_user));
+            
+            //Assert
+            Assert.AreEqual(expected, ex.Message.ToString());
+        }
+
+        [TestMethod]
+        public void RemoveUserTest()
+        {
+            _harness.Add(_user);
+            var expected = _harness.GetById(_user.Id);
+            _harness.Remove(_user);
+            var actual = Assert.ThrowsException<UserAdapterNotFoundException>(() => _harness.GetById(_user.Id));
+
+            Assert.AreNotEqual(expected, actual.Message.ToString());
+        }
+
+        [TestMethod]
+        public void UpdateUserTest()
+        {
+            UserAdapter harness = new UserAdapter(new MySqlUser());
+            
+            User test = new User("TestEmail@tester.com");
+            harness.Add(test);
+            string email = "TesterEmail@tester.com";
+            test.ChangeEmail(email);
+            harness.Update(test);
+
+            User expected = harness.GetByEmail("TesterEmail@tester.com");
+            User actual = harness.GetById(test.Id);
+            //var actual = Assert.ThrowsException<UserAdapterNotFoundException>(() => _harness.Remove(_user));
+
+            Assert.AreEqual(expected.Email, actual.Email);
+        }
+
         [TestMethod]
         public void TestAddAndGetAll()
         {
@@ -57,7 +103,7 @@ namespace BlabberApp.DataStoreTest
         [TestCleanup]
         public void TearDown()
         {
-            User user = new User(_email);
+            //User user = new User(_email);
             _harness.RemoveAll();
         }
     }

@@ -45,5 +45,23 @@ namespace BlabberApp.ServicesTest
             //Assert
             Assert.AreEqual("FindUserBlabs", actual.Message);
         }
+
+        [TestMethod]
+        public void AddNewBlabTest01()
+        {
+            //Arrange
+            string email = "WarMachineRox@Ironman.com";
+            User Katara = new User(email);
+            string msg = "Prow scuttle parrel provost Sail ho shrouds spirits boom mizzenmast yardarm.";
+            BlabService blabService = _blabServiceFactory.CreateBlabService();
+            Blab blab = blabService.CreateBlab(msg, Katara);
+            blabService.AddBlab(msg, email);
+            //Act
+            var actual = Assert.ThrowsException<NotImplementedException>(() => blabService.FindUserBlabs(email));
+            //Assert
+            Assert.AreEqual("FindUserBlabs", actual.Message);
+        }
+
+        
     }
 }
